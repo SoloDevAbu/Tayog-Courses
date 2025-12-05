@@ -15,23 +15,11 @@ import {
 } from "@/components/ui/collapsible";
 import { Clock, FileText, Download, MessageSquare, Upload, X, CheckCircle, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface Assignment {
-  id: string;
-  title: string;
-  dueDate: string;
-  attachment?: string;
-  status: "pending" | "submitted" | "graded";
-  grade?: string;
-  prompt?: string;
-  description?: string;
-  submission?: string;
-  submittedFile?: string;
-  feedback?: string;
-}
+import { useSubmitAssignment } from "@/hooks/student/assignments/useSubmitAssignment";
+import type { StudentAssignment } from "@/hooks/student/assignments/useAssignments";
 
 interface StudentAssignmentCardProps {
-  assignment: Assignment;
+  assignment: StudentAssignment;
   expandedId: string | null;
   onExpandChange: (id: string | null) => void;
 }
@@ -43,7 +31,7 @@ export function StudentAssignmentCard({
 }: StudentAssignmentCardProps) {
   const [submissionText, setSubmissionText] = React.useState(assignment.submission || "");
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const { mutate: submitAssignment, isPending: isSubmitting } = useSubmitAssignment();
   const [isSubmitted, setIsSubmitted] = React.useState(assignment.status !== "pending");
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const isExpanded = expandedId === assignment.id;
@@ -65,24 +53,47 @@ export function StudentAssignmentCard({
       return;
     }
 
-    setIsSubmitting(true);
-    try {
-      // TODO: Replace with actual API call
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      setIsSubmitted(true);
-      setSelectedFile(null);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+    let fileUrl: string | undefined;
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+      try {
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+        if (response.ok) {
+          const data = await response.json();
+          fileUrl = data.url;
+        } else {
+          fileUrl = `/uploads/${Date.now()}-${selectedFile.name}`;
+        }
+      } catch (error) {
+        console.error('File upload error:', error);
+        fileUrl = `/uploads/${Date.now()}-${selectedFile.name}`;
       }
-      alert("Assignment submitted successfully!");
-    } catch (error) {
-      console.error("Error submitting assignment:", error);
-      alert("Failed to submit assignment. Please try again.");
-    } finally {
-      setIsSubmitting(false);
     }
+
+    submitAssignment(
+      {
+        assignmentId: assignment.id,
+        summary: submissionText,
+        fileUrl,
+      },
+      {
+        onSuccess: () => {
+          setIsSubmitted(true);
+          setSelectedFile(null);
+          if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+          }
+        },
+        onError: (error) => {
+          console.error("Error submitting assignment:", error);
+          alert("Failed to submit assignment. Please try again.");
+        },
+      }
+    );
   };
 
   const getStatusBadge = () => {
@@ -132,7 +143,7 @@ export function StudentAssignmentCard({
                 <div className="flex items-center gap-4 flex-wrap">
                   <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                     <Clock className="h-3.5 w-3.5" />
-                    <span>Due: {assignment.dueDate}</span>
+                    <span>Due: {new Date(assignment.dueDate).toLocaleDateString()}</span>
                   </div>
                   {assignment.attachment && (
                     <Button
@@ -161,11 +172,11 @@ export function StudentAssignmentCard({
           <Separator />
           <CardContent className="p-6 space-y-6">
             {/* Assignment Prompt/Description */}
-            {(assignment.prompt || assignment.description) && (
+            {(assignment.title || assignment.description) && (
               <div className="space-y-2">
                 <p className="text-sm font-medium">Assignment Instructions:</p>
                 <p className="text-sm text-muted-foreground">
-                  {assignment.prompt || assignment.description}
+                  {assignment.title || assignment.description}
                 </p>
               </div>
             )}

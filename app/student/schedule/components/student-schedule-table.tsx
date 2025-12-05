@@ -11,30 +11,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Video } from "lucide-react";
-
-interface ScheduleItem {
-  id: string;
-  className: string;
-  topic: string;
-  time: string;
-}
-
-const scheduleData: ScheduleItem[] = [
-  {
-    id: "1",
-    className: "Mathematics",
-    topic: "Derivatives",
-    time: "02:00 PM",
-  },
-  {
-    id: "2",
-    className: "Physics",
-    topic: "Kinematics",
-    time: "10:00 AM",
-  },
-];
+import { useSchedules } from "@/hooks/student/schedule/useSchedules";
+import { format } from "date-fns";
 
 export function StudentScheduleTable() {
+  const { data: scheduleData = [], isLoading } = useSchedules();
   return (
     <div className="rounded-md border">
       <Table>
@@ -47,7 +28,13 @@ export function StudentScheduleTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {scheduleData.length === 0 ? (
+          {isLoading ? (
+            <TableRow>
+              <TableCell colSpan={4} className="h-24 text-center">
+                Loading schedules...
+              </TableCell>
+            </TableRow>
+          ) : scheduleData.length === 0 ? (
             <TableRow>
               <TableCell colSpan={4} className="h-24 text-center">
                 No scheduled classes found.
@@ -64,7 +51,7 @@ export function StudentScheduleTable() {
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100">
                       <Clock className="h-5 w-5 text-blue-600" />
                     </div>
-                    <span className="font-semibold">{item.className}</span>
+                    <span className="font-semibold">{item.subject}</span>
                   </div>
                 </TableCell>
                 <TableCell className="py-4">
@@ -72,13 +59,14 @@ export function StudentScheduleTable() {
                 </TableCell>
                 <TableCell className="py-4">
                   <Badge variant="outline" className="bg-gray-100 text-gray-700">
-                    {item.time}
+                    {format(new Date(item.time), "hh:mm a")}
                   </Badge>
                 </TableCell>
                 <TableCell className="py-4 text-right">
                   <Button
                     size="sm"
                     className="bg-green-600 hover:bg-green-700 text-white"
+                    onClick={() => window.open(item.meetingLink, '_blank')}
                   >
                     <Video className="mr-2 h-4 w-4" />
                     Join Class
