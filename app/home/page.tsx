@@ -42,46 +42,50 @@ export default function HomePage() {
 
             <div className="flex flex-col gap-2 sm:gap-3 md:gap-4">
               {/* Teacher Portal Card */}
-              <Link href="/teacher/login" className="block">
-                <Card className="hover:shadow-md transition-shadow cursor-pointer border-gray-200">
-                  <CardContent className="p-3 sm:p-4 md:p-5">
-                    <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
-                      <div className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 lg:w-14 lg:h-14 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
-                        <Users className="w-5 h-5 sm:w-6 sm:h-6 md:w-6 md:h-6 lg:w-7 lg:h-7 text-blue-600" />
+              <div className="space-y-2">
+                <Link href="/teacher/login" className="block">
+                  <Card className="hover:shadow-md transition-shadow cursor-pointer border-gray-200">
+                    <CardContent className="p-3 sm:p-4 md:p-5">
+                      <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+                        <div className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 lg:w-14 lg:h-14 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
+                          <Users className="w-5 h-5 sm:w-6 sm:h-6 md:w-6 md:h-6 lg:w-7 lg:h-7 text-blue-600" />
+                        </div>
+                        <div className="flex flex-col gap-0.5">
+                          <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-black">
+                            Teacher Portal
+                          </h3>
+                          <p className="text-xs sm:text-xs md:text-sm text-gray-600">
+                            Manage classes, grade work & AI tools
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex flex-col gap-0.5">
-                        <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-black">
-                          Teacher Portal
-                        </h3>
-                        <p className="text-xs sm:text-xs md:text-sm text-gray-600">
-                          Manage classes, grade work & AI tools
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </div>
 
               {/* Student Portal Card */}
-              <Link href="/student/login" className="block">
-                <Card className="hover:shadow-md transition-shadow cursor-pointer border-gray-200">
-                  <CardContent className="p-3 sm:p-4 md:p-5">
-                    <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
-                      <div className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 lg:w-14 lg:h-14 bg-green-100 rounded-lg flex items-center justify-center shrink-0">
-                        <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 md:w-6 md:h-6 lg:w-7 lg:h-7 text-green-600" />
+              <div className="space-y-2">
+                <Link href="/student/login" className="block">
+                  <Card className="hover:shadow-md transition-shadow cursor-pointer border-gray-200">
+                    <CardContent className="p-3 sm:p-4 md:p-5">
+                      <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+                        <div className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 lg:w-14 lg:h-14 bg-green-100 rounded-lg flex items-center justify-center shrink-0">
+                          <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 md:w-6 md:h-6 lg:w-7 lg:h-7 text-green-600" />
+                        </div>
+                        <div className="flex flex-col gap-0.5">
+                          <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-black">
+                            Student Portal
+                          </h3>
+                          <p className="text-xs sm:text-xs md:text-sm text-gray-600">
+                            Access assignments & resources
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex flex-col gap-0.5">
-                        <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-black">
-                          Student Portal
-                        </h3>
-                        <p className="text-xs sm:text-xs md:text-sm text-gray-600">
-                          Access assignments & resources
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </div>
             </div>
           </div>
         </div>

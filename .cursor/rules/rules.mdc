@@ -1,10 +1,79 @@
 ---
 alwaysApply: true
 ---
-Use only existing shadcn components, and if a component is missing, generate it using npx shadcn add or yarn shadcn add.
+## 1. Network & requests
 
-Never use any — always use strict and proper TypeScript types.
+- **Always use Axios** for any API or network requests. Do not use `fetch`, `ky`, `got`, or any other HTTP client.
+- Provide a single exported Axios instance at `lib/axios.ts` named `api`. Use `api` everywhere.
+- Configure Axios interceptors for auth headers and tenant resolution.
 
-Create a folder with subfolders for each page, and keep the page’s component inside its own folder.
+## 2. Data fetching & caching
 
-Created validation folder at root level validation/ folder structure
+- **All** data fetching, caching, and mutations must be implemented using **TanStack Query**.
+- Each domain must expose strongly-typed hooks that wrap TanStack Query (e.g., `useProjects`, `useCreateTask`, `useWorkLogs`).
+- Mutations must use optimistic updates where it makes UX sense, and rollback on error.
+
+## 3. Project structure & separation of concerns
+
+- Root-level `hooks` folder is required. Inside `hooks`, create **one subfolder per feature/domain**:
+  - `hooks/organization/`
+  - `hooks/projects/`
+  - `hooks/tasks/`
+  - `hooks/inventory/`
+  - etc.
+- Each hook file is named for the action: `useProjects.ts`, `useCreateProject.ts`, etc.
+- Root-level `components` folder: mirror the `hooks` structure with feature subfolders:
+  - `components/projects/ProjectCard.tsx`
+  - `components/tasks/TaskBoard.tsx`
+- **UI primitives** (Radix components and small shared building blocks) must live under `components/ui/`.
+
+## 4. UI library
+
+- Use **Radix UI primitives** for all low-level interactive UI controls (modals, dropdowns, popovers, dialogs, switches, sliders).
+- Higher-level components may be composed using Radix primitives + Tailwind utilities.
+- Place Radix-based primitives under `components/ui/*` if helpful.
+
+- Create a `lib` folder at the project root for all library and utility functions.
+
+## 5. Types & forms
+
+- **Never use `any`.** All types must be explicit.
+- Share domain types in `types/` or `lib/types.ts` and import them across hooks/components.
+- Use `zod` for all input validation. Use `react-hook-form` + `@hookform/resolvers/zod`.
+- Derive TypeScript types from zod schemas using `z.infer<typeof schema>`.
+
+## 6. Validation and error handling
+
+- Validate API responses (shape) before using them in UI-critical calculations.
+- All forms show server validation errors in the UI.
+- All network errors must be surfaced via TanStack Query `onError` hooks and logged.
+
+## 7. Database & server-side rules (for backend devs / generated server code)
+
+- Tenant resolution MUST be done in middleware and available on `req.context` or equivalent server context.
+- All writes must be performed inside transactions when multiple tables change (Prisma `$transaction`).
+- Transfer actions must write both the changed assignment plus the transfer log inside the same transaction.
+- Prevent negative inventory at DB or business logic layer — reject operations that would set negative quantity.
+
+## 8. Files & assets
+
+- Attachments should be uploaded directly to object storage (S3-compatible) via signed upload URLs. Backend should validate file types/sizes.
+- Save file metadata (URL, size, uploader, created_at) in DB; do not store binary blobs in DB.
+
+## 9. Testing
+
+- All hooks and pure helpers must have unit tests.
+- API routes must have integration tests.
+- E2E for critical flows (org creation, project rollups, task transfer).
+- Use CI to run tests on PRs.
+
+## 10. Coding style & maintainability
+
+- Keep functions < 200 lines ideally; break down large components.
+- Prefer composition over inheritance.
+- Keep business logic out of components — place it in `lib/` or `services/`.
+- Reuse UI fragments from `components/ui` rather than re-creating them.
+
+
+- Write clean, modular, and maintainable code with clear separation between business logic and UI.
+- Include types and interfaces that enforce strict typings throughout the codebase.

@@ -12,3 +12,122 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id String @id @default(uuid())
+  email String @unique
+  password String
+  name String @db.VarChar(255)
+  lastLogin DateTime? @default(now()) @map("last_login")
+  role Role
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  courses Course[]
+  studentCourses Course[] @relation("StudentCourse")
+  submissions Submission[]
+  feedbacks Feedback[]
+  scheduledClasses ScheduleClasses[]
+  
+  @@map("users")
+}
+
+enum Role {
+  TEACHER
+  STUDENT
+}
+
+model Course {
+  id String @id @default(uuid())
+  name String @db.VarChar(255)
+  description String
+  thumbnail String
+  teacherId String
+  teacher User @relation(fields: [teacherId], references: [id])
+  students User[] @relation("StudentCourse")
+  assignments Assignment[]
+  resources Resources[]
+  scheduledClasses ScheduleClasses[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("courses")
+}
+
+model Assignment {
+  id String @id @default(uuid())
+  title String
+  description String @db.Text
+  dueDate DateTime
+  attachment String?
+  courseId String
+  course Course @relation(fields: [courseId], references: [id])
+  submissions Submission[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("assignments")
+}
+
+model ScheduleClasses {
+  id String @id @default(uuid())
+  subject String @db.VarChar(255)
+  time DateTime
+  topic String @db.VarChar(255)
+  meetingLink String
+  courseId String
+  course Course @relation(fields: [courseId], references: [id])
+  teacherId String
+  teacher User @relation(fields: [teacherId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("schedule_classes")
+}
+
+model Resources {
+  id String @id @default(uuid())
+  title String @db.VarChar(255)
+  attachment String
+  type ResourceType
+  courseId String
+  course Course @relation(fields: [courseId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("resources")
+}
+
+model Submission {
+  id String @id @default(uuid())
+  summary String @db.Text
+  fileUrl String?
+  assignmentId String
+  assignment Assignment @relation(fields: [assignmentId], references: [id])
+  studentId String
+  student User @relation(fields: [studentId], references: [id])
+  feedback Feedback?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("submissions")
+}
+
+model Feedback {
+  id String @id @default(uuid())
+  comment String @db.Text
+  grade Float?
+  submissionId String @unique
+  submission Submission @relation(fields: [submissionId], references: [id])
+  teacherId String
+  teacher User @relation(fields: [teacherId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("feedbacks")
+}
+
+enum ResourceType {
+  PDF_DOCUMENT
+  VIDEO_CLASS
+  IMAGE
+}
