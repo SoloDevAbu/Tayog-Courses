@@ -22,6 +22,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
@@ -51,6 +52,7 @@ const menuItems = [
 export function StudentSidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const { state } = useSidebar();
 
   const handleLogout = () => {
     // Clear any stored authentication data
@@ -58,8 +60,8 @@ export function StudentSidebar() {
       localStorage.clear();
       sessionStorage.clear();
     }
-    // Redirect to home page
-    router.push("/home");
+    // Redirect to landing page
+    router.push("/landing");
   };
 
   return (
@@ -69,18 +71,15 @@ export function StudentSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/student" className="flex items-center gap-3">
-                <div className="flex shrink-0 items-center justify-center">
+                <div className="flex shrink-0 items-center justify-start">
                   <Image
-                    src="/logo/tayog.svg"
+                    src={state === "collapsed" ? "/logo/tayog.svg" : "/logo/tayoglogo.svg"}
                     alt="Tayog Logo"
-                    width={32}
-                    height={32}
-                    className="group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8"
+                    width={state === "collapsed" ? 32 : 238}
+                    height={state === "collapsed" ? 32 : 77}
+                    className={state === "collapsed" ? "h-8 w-8" : "h-auto max-w-[120px] object-contain"}
                   />
                 </div>
-                <span className="truncate font-semibold text-sm group-data-[collapsible=icon]:hidden">
-                  Kalnet
-                </span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

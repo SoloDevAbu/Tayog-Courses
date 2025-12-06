@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { GraduationCap, Users, BookOpen } from "lucide-react";
 import Link from "next/link";
 
-export default function HomePage() {
+export function LandingPage() {
   return (
     <div className="flex min-h-screen bg-gray-100 items-center justify-center p-3 sm:p-4 md:p-6">
       {/* Main Card Container */}

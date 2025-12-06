@@ -6,7 +6,11 @@ import { Video } from "lucide-react";
 import { useSchedules } from "@/hooks/student/schedule/useSchedules";
 import { format } from "date-fns";
 
-export function StudentNextClass() {
+interface StudentNextClassProps {
+  courseId?: string | null;
+}
+
+export function StudentNextClass({ courseId }: StudentNextClassProps) {
   const { data: schedules = [], isLoading } = useSchedules();
 
   const now = new Date();

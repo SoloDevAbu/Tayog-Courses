@@ -6,7 +6,13 @@ import { Clock } from "lucide-react";
 import { useAssignments } from "@/hooks/student/assignments/useAssignments";
 import { format } from "date-fns";
 
-export function StudentUpcomingDeadlines() {
+interface StudentUpcomingDeadlinesProps {
+  courseId?: string | null;
+}
+
+export function StudentUpcomingDeadlines({
+  courseId,
+}: StudentUpcomingDeadlinesProps) {
   const { data: assignments = [], isLoading } = useAssignments();
 
   const pendingAssignments = assignments

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { StudentAssignmentCard } from "./student-assignment-card";
+import { StudentAssignmentCard } from "./StudentAssignmentCard";
 import { useAssignments } from "@/hooks/student/assignments/useAssignments";
 
 export function StudentAssignmentsList() {
