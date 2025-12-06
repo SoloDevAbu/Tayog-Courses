@@ -35,7 +35,7 @@ import { Spinner } from "@/components/ui/spinner";
 import {
   createAssignmentSchema,
   type CreateAssignmentFormValues,
-} from "@/validation";
+} from "@/validation/assignments";
 import { useCreateAssignment } from "@/hooks/teacher/assignments/useCreateAssignment";
 
 interface CreateAssignmentDialogProps {

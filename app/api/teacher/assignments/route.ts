@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 import prisma from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/getSession";
-import { createAssignmentSchema } from "@/validation";
+import { createAssignmentSchema } from "@/validation/assignments";
 
 export async function GET(request: NextRequest) {
   try {
