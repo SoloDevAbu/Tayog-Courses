@@ -144,7 +144,7 @@ export default function StudentSignupPage() {
                 </Link>
               </p>
               <Link
-                href="/home"
+                href="/landing"
                 className="text-sm text-gray-600 hover:text-gray-900 underline block"
               >
                 Back to portal selection

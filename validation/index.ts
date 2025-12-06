@@ -8,6 +8,12 @@ export {
   type SignupApiData,
 } from "./auth/auth.schema";
 
+// Profile
+export {
+  updateProfileSchema,
+  type UpdateProfileFormValues,
+} from "./auth/profile.schema";
+
 // Assignments
 export {
   createAssignmentSchema,
