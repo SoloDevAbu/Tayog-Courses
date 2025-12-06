@@ -23,7 +23,7 @@ import { TimePicker } from "@/components/ui/time-picker";
 import {
   scheduleClassSchema,
   type ScheduleClassFormValues,
-} from "@/validation/schedule";
+} from "@/validation";
 import { useCreateSchedule } from "@/hooks/teacher/schedule/useCreateSchedule";
 
 interface ScheduleClassDialogProps {

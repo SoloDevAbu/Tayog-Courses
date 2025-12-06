@@ -22,7 +22,7 @@ import { Spinner } from "@/components/ui/spinner";
 import {
   enrollStudentSchema,
   type EnrollStudentFormValues,
-} from "@/validation/students";
+} from "@/validation";
 import { useEnrollStudent } from "@/hooks/teacher/students/useEnrollStudent";
 
 interface EnrollStudentDialogProps {
