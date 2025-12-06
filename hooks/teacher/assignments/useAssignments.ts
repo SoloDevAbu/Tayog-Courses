@@ -1,22 +1,22 @@
-import { useQuery } from '@tanstack/react-query';
-import { api } from '@/lib/axios';
-
-export interface Assignment {
-  id: string;
-  title: string;
-  description: string;
-  dueDate: string;
-  attachment?: string | null;
-  submissions: number;
-}
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/lib/axios";
+import { useCourseStore } from "@/lib/courseStore";
+import type { Assignment } from "@/types";
 
 export function useAssignments() {
+  const { selectedCourseId } = useCourseStore();
+
   return useQuery({
-    queryKey: ['assignments'],
+    queryKey: ["teacher", "assignments", selectedCourseId],
     queryFn: async (): Promise<Assignment[]> => {
-      const response = await api.get<Assignment[]>('/teacher/assignments');
+      if (!selectedCourseId) {
+        throw new Error("Course ID is required");
+      }
+      const response = await api.get<Assignment[]>(
+        `/teacher/assignments?courseId=${selectedCourseId}`
+      );
       return response.data;
     },
+    enabled: !!selectedCourseId,
   });
 }
-

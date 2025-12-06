@@ -1,5 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
-import { api } from '@/lib/axios';
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/lib/axios";
+import { useCourseStore } from "@/lib/courseStore";
 
 export interface StudentAssignment {
   id: string;
@@ -7,7 +8,7 @@ export interface StudentAssignment {
   description: string;
   dueDate: string;
   attachment?: string | null;
-  status: 'pending' | 'submitted' | 'graded';
+  status: "pending" | "submitted" | "graded";
   submission?: string | null;
   submittedFile?: string | null;
   feedback?: string | null;
@@ -15,12 +16,19 @@ export interface StudentAssignment {
 }
 
 export function useAssignments() {
+  const { selectedCourseId } = useCourseStore();
+
   return useQuery({
-    queryKey: ['student', 'assignments'],
+    queryKey: ["student", "assignments", selectedCourseId],
     queryFn: async (): Promise<StudentAssignment[]> => {
-      const response = await api.get<StudentAssignment[]>('/student/assignments');
+      if (!selectedCourseId) {
+        throw new Error("Course ID is required");
+      }
+      const response = await api.get<StudentAssignment[]>(
+        `/student/assignments?courseId=${selectedCourseId}`
+      );
       return response.data;
     },
+    enabled: !!selectedCourseId,
   });
 }
-
