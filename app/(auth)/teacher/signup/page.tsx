@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Users } from "lucide-react";
 import Link from "next/link";
-import { signupSchema, type SignupFormValues } from "@/validation/auth";
+import { signupSchema, type SignupFormValues } from "@/validation";
 import { useSignup } from "@/hooks/auth/useSignup";
 import { useState } from "react";
 
@@ -144,7 +144,7 @@ export default function TeacherSignupPage() {
                 </Link>
               </p>
               <Link
-                href="/home"
+                href="/landing"
                 className="text-sm text-gray-600 hover:text-gray-900 underline block"
               >
                 Back to portal selection
