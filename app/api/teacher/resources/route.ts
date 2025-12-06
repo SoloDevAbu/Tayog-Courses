@@ -3,6 +3,8 @@ import { ZodError } from "zod";
 import prisma from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/getSession";
 import { uploadResourceSchema } from "@/validation";
+import { uploadFile } from "@/lib/s3";
+import { getS3FileUrl } from "@/lib/utils";
 
 const RESOURCE_TYPE_MAP: Record<
   string,
@@ -56,7 +58,9 @@ export async function GET(request: NextRequest) {
         id: resource.id,
         title: resource.title,
         type: resource.type,
-        attachment: resource.attachment,
+        attachment: resource.attachment
+          ? getS3FileUrl(resource.attachment)
+          : null,
         createdAt: resource.createdAt.toISOString(),
       }))
     );
@@ -126,19 +130,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let attachmentUrl = "";
+    let attachmentKey = "";
     if (file) {
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      const fileName = `${Date.now()}-${file.name}`;
-      attachmentUrl = `/uploads/${fileName}`;
+      try {
+        // Upload file to S3
+        attachmentKey = await uploadFile(file);
+      } catch (error) {
+        console.error("Error uploading file to S3:", error);
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Failed to upload file to S3",
+          },
+          { status: 500 }
+        );
+      }
     }
 
     const resource = await prisma.resources.create({
       data: {
         title,
         type: resourceType,
-        attachment: attachmentUrl,
+        attachment: attachmentKey,
         courseId: course.id,
       },
     });
@@ -149,7 +162,7 @@ export async function POST(request: NextRequest) {
         id: resource.id,
         title: resource.title,
         type: resource.type,
-        attachment: resource.attachment,
+        attachment: attachmentKey ? getS3FileUrl(attachmentKey) : null,
         createdAt: resource.createdAt.toISOString(),
       },
       { status: 201 }
