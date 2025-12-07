@@ -21,9 +21,9 @@ interface Assignment {
   id: string;
   title: string;
   dueDate: string;
-  attachment?: string;
+  attachment?: string | null;
   description?: string;
-  submissions: number;
+  submissions?: number;
 }
 
 interface StudentSubmission {
