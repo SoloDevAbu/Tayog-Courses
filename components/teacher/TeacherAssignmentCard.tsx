@@ -6,9 +6,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Clock, FileText, ChevronRight, Edit } from "lucide-react";
 import { cn } from "@/lib/utils";
+
 import { EditAssignmentDialog } from "@/components/teacher/EditAssignmentDialog";
 import { format } from "date-fns";
-import type { Assignment } from "@/types/assignment";
+import type { Assignment } from "@/types";
 
 interface TeacherAssignmentCardProps {
   assignment: Assignment;
