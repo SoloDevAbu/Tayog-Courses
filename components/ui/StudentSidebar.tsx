@@ -126,17 +126,19 @@ export function StudentSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <SidebarMenu className="gap-2">
+        <SidebarMenu className="gap-3">
           <SidebarMenuItem>
-            <div className="flex items-center gap-3 px-2 py-2 group-data-[collapsible=icon]:justify-center">
-              <Avatar>
-                <AvatarFallback>{userInitials}</AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col text-left group-data-[collapsible=icon]:hidden">
-                <p className="truncate font-semibold text-sm">{userName}</p>
-                <p className="truncate text-xs text-muted-foreground">{userRole}</p>
-              </div>
-            </div>
+            <SidebarMenuButton asChild tooltip="View Profile">
+              <Link href="/student/profile" className="flex items-center gap-3 px-2 py-2.5 group-data-[collapsible=icon]:justify-center">
+                <Avatar className="border-2 border-border">
+                  <AvatarFallback>{userInitials}</AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col text-left group-data-[collapsible=icon]:hidden">
+                  <p className="truncate font-semibold text-sm">{userName}</p>
+                  <p className="truncate text-xs text-muted-foreground">{userRole}</p>
+                </div>
+              </Link>
+            </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
