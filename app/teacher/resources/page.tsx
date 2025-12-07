@@ -19,7 +19,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { FileText, Video, MoreVertical, Upload, X, Image as ImageIcon, FolderOpen, Check, Download } from "lucide-react";
+import Image from "next/image";
 import { Spinner } from "@/components/ui/spinner";
+import ImageDialogViewer from "@/components/ui/ImageDialogViewer";
+import VideoDisplay from "@/components/ui/VideoDisplay";
 import { useResources } from "@/hooks/teacher/resources/useResources";
 import { useCreateResource } from "@/hooks/teacher/resources/useCreateResource";
 import { useDeleteResource } from "@/hooks/teacher/resources/useDeleteResource";
@@ -215,11 +218,12 @@ export default function ResourcesPage() {
               <div className="flex items-start gap-4 mb-4">
                 {/* Preview */}
                 {filePreview && type === "Image" && (
-                  <div className="shrink-0">
-                    <img
+                  <div className="shrink-0 relative h-20 w-20">
+                    <Image
                       src={filePreview}
                       alt="Preview"
-                      className="h-20 w-20 object-cover rounded-md border"
+                      fill
+                      className="object-cover rounded-md border"
                     />
                   </div>
                 )}
@@ -331,172 +335,96 @@ export default function ResourcesPage() {
                 className="relative overflow-hidden hover:shadow-lg transition-shadow duration-200 group"
               >
                 <CardContent className="p-0">
-                  {/* Thumbnail Preview for Images and Videos */}
-                  {(typeInfo.icon === "image" || typeInfo.icon === "video") && (
-                    <div className="relative w-full h-48 bg-gray-100 overflow-hidden">
-                      {typeInfo.icon === "image" ? (
-                        <img
-                          src={resource.attachment}
-                          alt={resource.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="relative w-full h-full bg-black">
-                          <video
-                            src={resource.attachment}
-                            className="w-full h-full object-cover opacity-90"
-                            muted
-                            playsInline
-                            preload="metadata"
-                          />
-                          <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                            <div className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center shadow-lg">
-                              <Video className="h-8 w-8 text-red-600" />
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      <div className="absolute top-2 right-2">
-                        <span className="px-2 py-1 text-xs font-semibold text-white bg-black/60 rounded backdrop-blur-sm">
-                          {typeInfo.label}
-                        </span>
-                      </div>
-                      {/* Three dots menu for images/videos */}
-                      <div className="absolute top-2 left-2">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-8 w-8 bg-white/80 hover:bg-white/90 backdrop-blur-sm">
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onClick={() => setViewingResource(resource)}
-                            >
-                              View Content
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => {
-                                if (resource.attachment) {
-                                  window.open(resource.attachment, '_blank');
-                                }
-                              }}
-                            >
-                              <Download className="mr-2 h-4 w-4" /> Download
-                            </DropdownMenuItem>
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <DropdownMenuItem
-                                  onSelect={(e) => e.preventDefault()}
-                                  variant="destructive"
-                                >
-                                  Delete
-                                </DropdownMenuItem>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>Delete Resource</AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    Are you sure you want to delete "{resource.title}"? This action cannot be undone and the file will be permanently removed from S3.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction
-                                    onClick={() => deleteResource(resource.id)}
-                                    className="bg-red-600 hover:bg-red-700"
-                                    disabled={isDeleting}
-                                  >
-                                    {isDeleting ? "Deleting..." : "Delete"}
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    </div>
-                  )}
-
                   <div className="p-6">
-                    {/* Three dots menu for PDF */}
-                    {typeInfo.icon === "pdf" && (
-                      <div className="absolute top-4 right-4">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onClick={() => setViewingResource(resource)}
-                            >
-                              View Content
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => {
-                                if (resource.attachment) {
-                                  window.open(resource.attachment, '_blank');
-                                }
-                              }}
-                            >
-                              <Download className="mr-2 h-4 w-4" /> Download
-                            </DropdownMenuItem>
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <DropdownMenuItem
-                                  onSelect={(e) => e.preventDefault()}
-                                  variant="destructive"
+                    {/* Three dots menu for all types */}
+                    <div className="absolute top-4 right-4">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onClick={() => {
+                              if (resource.type === "PDF_DOCUMENT" && resource.attachment) {
+                                window.open(resource.attachment, '_blank');
+                              } else {
+                                setViewingResource(resource);
+                              }
+                            }}
+                          >
+                            View Content
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => {
+                              if (resource.attachment) {
+                                window.open(resource.attachment, '_blank');
+                              }
+                            }}
+                          >
+                            <Download className="mr-2 h-4 w-4" /> Download
+                          </DropdownMenuItem>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <DropdownMenuItem
+                                onSelect={(e) => e.preventDefault()}
+                                variant="destructive"
+                              >
+                                Delete
+                              </DropdownMenuItem>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Delete Resource</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Are you sure you want to delete "{resource.title}"? This action cannot be undone and the file will be permanently removed from S3.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => deleteResource(resource.id)}
+                                  className="bg-red-600 hover:bg-red-700"
+                                  disabled={isDeleting}
                                 >
-                                  Delete
-                                </DropdownMenuItem>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>Delete Resource</AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    Are you sure you want to delete "{resource.title}"? This action cannot be undone and the file will be permanently removed from S3.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction
-                                    onClick={() => deleteResource(resource.id)}
-                                    className="bg-red-600 hover:bg-red-700"
-                                    disabled={isDeleting}
-                                  >
-                                    {isDeleting ? "Deleting..." : "Delete"}
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    )}
+                                  {isDeleting ? "Deleting..." : "Delete"}
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
 
-                    {/* Icon for PDF */}
-                    {typeInfo.icon === "pdf" && (
-                      <div className="mb-4">
+                    {/* Icon for all types */}
+                    <div className="mb-4">
+                      {typeInfo.icon === "pdf" && (
                         <div className="flex h-12 w-12 items-center justify-center rounded-md bg-yellow-100">
                           <FileText className="h-6 w-6 text-amber-800" />
                         </div>
-                      </div>
-                    )}
+                      )}
+                      {typeInfo.icon === "video" && (
+                        <div className="flex h-12 w-12 items-center justify-center rounded-md bg-red-100">
+                          <Video className="h-6 w-6 text-red-600" />
+                        </div>
+                      )}
+                      {typeInfo.icon === "image" && (
+                        <div className="flex h-12 w-12 items-center justify-center rounded-md bg-blue-100">
+                          <ImageIcon className="h-6 w-6 text-blue-600" />
+                        </div>
+                      )}
+                    </div>
 
                     {/* Title */}
                     <h3 className="font-semibold text-lg mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                       {resource.title}
                     </h3>
 
-                    {/* Type for PDF */}
-                    {typeInfo.icon === "pdf" && (
-                      <p className="text-xs text-muted-foreground uppercase mb-4">
-                        {typeInfo.label}
-                      </p>
-                    )}
+                    {/* Type label */}
+                    <p className="text-xs text-muted-foreground uppercase mb-4">
+                      {typeInfo.label}
+                    </p>
 
                     {/* Footer */}
                     <div className="flex items-center justify-between mt-4 pt-4 border-t">
@@ -522,7 +450,11 @@ export default function ResourcesPage() {
                             <Button
                               variant="link"
                               onClick={() => {
-                                setViewingResource(resource);
+                                if (resource.type === "PDF_DOCUMENT" && resource.attachment) {
+                                  window.open(resource.attachment, '_blank');
+                                } else {
+                                  setViewingResource(resource);
+                                }
                               }}
                               className="h-auto p-0 text-blue-600 hover:text-blue-700 font-medium"
                             >
@@ -541,72 +473,27 @@ export default function ResourcesPage() {
       </div>
 
       {/* File Viewer Dialog - LinkedIn Style */}
-      <Dialog open={!!viewingResource} onOpenChange={(open) => !open && setViewingResource(null)}>
-        <DialogContent className="max-w-5xl max-h-[95vh] overflow-hidden flex flex-col p-0 gap-0">
-          <DialogHeader className="px-6 py-4 border-b">
-            <DialogTitle className="text-xl font-semibold">{viewingResource?.title}</DialogTitle>
-            {viewingResource && (
-              <p className="text-sm text-muted-foreground mt-1">
-                {resourceTypeMap[viewingResource.type]?.label}
-              </p>
-            )}
-          </DialogHeader>
-          <div className="flex-1 overflow-auto bg-gray-50 p-6">
-            {viewingResource && (
+      {viewingResource && viewingResource.type === "IMAGE" ? (
+        <ImageDialogViewer
+          imageUrl={viewingResource.attachment}
+          isOpen={!!viewingResource}
+          onClose={() => setViewingResource(null)}
+          alt={viewingResource.title}
+        />
+      ) : viewingResource && viewingResource.type === "VIDEO_CLASS" ? (
+        <Dialog open={!!viewingResource} onOpenChange={(open) => !open && setViewingResource(null)}>
+          <DialogContent className="max-w-5xl max-h-[95vh] overflow-hidden flex flex-col p-0 gap-0 bg-black border-none">
+            <div className="flex-1 overflow-auto bg-black p-6">
               <div className="flex justify-center items-center min-h-[60vh]">
-                {viewingResource.type === "PDF_DOCUMENT" && (
-                  <iframe
-                    src={viewingResource.attachment}
-                    className="w-full h-[75vh] border rounded-lg shadow-lg bg-white"
-                    title={viewingResource.title}
-                  />
-                )}
-                {viewingResource.type === "VIDEO_CLASS" && (
-                  <div className="w-full max-w-4xl">
-                    <video
-                      src={viewingResource.attachment}
-                      controls
-                      controlsList="nodownload"
-                      className="w-full h-auto max-h-[75vh] rounded-lg shadow-lg bg-black"
-                      preload="metadata"
-                      playsInline
-                      crossOrigin="anonymous"
-                    >
-                      Your browser does not support the video tag.
-                    </video>
-                  </div>
-                )}
-                {viewingResource.type === "IMAGE" && (
-                  <div className="flex justify-center w-full">
-                    <img
-                      src={viewingResource.attachment}
-                      alt={viewingResource.title}
-                      className="max-w-full max-h-[75vh] object-contain rounded-lg shadow-lg"
-                      loading="eager"
-                    />
-                  </div>
-                )}
+                <VideoDisplay
+                  videoUrl={viewingResource.attachment}
+                  className="w-full max-w-4xl"
+                />
               </div>
-            )}
-          </div>
-          {viewingResource && (
-            <div className="flex justify-end gap-3 px-6 py-4 border-t bg-white">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  if (viewingResource.attachment) {
-                    window.open(viewingResource.attachment, '_blank');
-                  }
-                }}
-                className="flex items-center gap-2"
-              >
-                <Download className="h-4 w-4" />
-                Download
-              </Button>
             </div>
-          )}
-        </DialogContent>
-      </Dialog>
+          </DialogContent>
+        </Dialog>
+      ) : null}
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={!!deletingResourceId} onOpenChange={(open) => !open && setDeletingResourceId(null)}>

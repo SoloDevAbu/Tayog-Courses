@@ -6,6 +6,10 @@ import { uploadResourceSchema } from "@/validation";
 import { uploadFile } from "@/lib/s3";
 import { getS3FileUrl } from "@/lib/utils";
 
+// Configure API route to accept larger file uploads (up to 200MB)
+export const runtime = "nodejs";
+export const maxDuration = 300; // 5 minutes for large file uploads
+
 const RESOURCE_TYPE_MAP: Record<
   string,
   "PDF_DOCUMENT" | "VIDEO_CLASS" | "IMAGE"
@@ -54,14 +58,15 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(
       resources.map((resource) => ({
-        success: true,
         id: resource.id,
         title: resource.title,
         type: resource.type,
         attachment: resource.attachment
           ? getS3FileUrl(resource.attachment)
-          : null,
+          : "",
+        courseId: resource.courseId,
         createdAt: resource.createdAt.toISOString(),
+        updatedAt: resource.updatedAt.toISOString(),
       }))
     );
   } catch (error: unknown) {
@@ -158,12 +163,13 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       {
-        success: true,
         id: resource.id,
         title: resource.title,
         type: resource.type,
-        attachment: attachmentKey ? getS3FileUrl(attachmentKey) : null,
+        attachment: attachmentKey ? getS3FileUrl(attachmentKey) : "",
+        courseId: resource.courseId,
         createdAt: resource.createdAt.toISOString(),
+        updatedAt: resource.updatedAt.toISOString(),
       },
       { status: 201 }
     );

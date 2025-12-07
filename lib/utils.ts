@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
- * Generate S3 file URL for display
+ * Generate S3 file URL for display (previous project format)
  * @param key - S3 key (path) of the file
  * @returns Public URL of the file
  */
@@ -14,8 +14,19 @@ export function getS3FileUrl(key: string): string {
   const bucket = process.env.NEXT_PUBLIC_BUCKET_NAME || "tayog.in";
   const region = process.env.NEXT_PUBLIC_AWS_REGION || "ap-south-1";
   
-  // Generate S3 public URL
-  return `https://${bucket}.s3.${region}.amazonaws.com/${key}`;
+  // Generate S3 public URL (previous project format)
+  return `https://s3.${region}.amazonaws.com/${bucket}/${key}`;
+}
+
+/**
+ * Generate S3 image URL from key (for next/image compatibility)
+ * @param image - S3 key (path) of the image
+ * @returns Full S3 URL
+ */
+export function getImageUrl(image: string): string {
+  const bucket = process.env.NEXT_PUBLIC_BUCKET_NAME || "tayog.in";
+  const region = process.env.NEXT_PUBLIC_AWS_REGION || "ap-south-1";
+  return `https://s3.${region}.amazonaws.com/${bucket}/${image}`;
 }
 
 /**

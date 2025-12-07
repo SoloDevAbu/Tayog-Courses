@@ -1,7 +1,10 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
+import ImageDialogViewer from "@/components/ui/ImageDialogViewer";
+import VideoDisplay from "@/components/ui/VideoDisplay";
 import { Button } from "@/components/ui/button";
 import { FileText, Video, Download, Image as ImageIcon } from "lucide-react";
 import { useResources, type StudentResource } from "@/hooks/student/resources/useResources";
@@ -22,7 +25,11 @@ export function StudentResourcesGrid() {
   };
 
   const handleView = (resource: StudentResource) => {
-    setViewingResource(resource);
+    if (resource.type === "PDF_DOCUMENT" && resource.attachment) {
+      window.open(resource.attachment, '_blank');
+    } else {
+      setViewingResource(resource);
+    }
   };
 
   if (isLoading) {
@@ -62,61 +69,35 @@ export function StudentResourcesGrid() {
               onClick={() => handleView(resource)}
             >
               <CardContent className="p-0">
-                {/* Thumbnail Preview for Images and Videos */}
-                {(typeInfo.icon === "image" || typeInfo.icon === "video") && (
-                  <div className="relative w-full h-48 bg-gray-100 overflow-hidden">
-                    {typeInfo.icon === "image" ? (
-                      <img
-                        src={resource.attachment}
-                        alt={resource.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="relative w-full h-full bg-black">
-                        <video
-                          src={resource.attachment}
-                          className="w-full h-full object-cover opacity-90"
-                          muted
-                          playsInline
-                          preload="metadata"
-                        />
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                          <div className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center shadow-lg">
-                            <Video className="h-8 w-8 text-red-600" />
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    <div className="absolute top-2 right-2">
-                      <span className="px-2 py-1 text-xs font-semibold text-white bg-black/60 rounded backdrop-blur-sm">
-                        {typeInfo.label}
-                      </span>
-                    </div>
-                  </div>
-                )}
-
                 <div className="p-6">
-                  {/* Icon for PDF */}
-                  {typeInfo.icon === "pdf" && (
-                    <div className="mb-4">
+                  {/* Icon for all types */}
+                  <div className="mb-4">
+                    {typeInfo.icon === "pdf" && (
                       <div className="flex h-12 w-12 items-center justify-center rounded-md bg-yellow-100">
                         <FileText className="h-6 w-6 text-amber-800" />
                       </div>
-                    </div>
-                  )}
+                    )}
+                    {typeInfo.icon === "video" && (
+                      <div className="flex h-12 w-12 items-center justify-center rounded-md bg-red-100">
+                        <Video className="h-6 w-6 text-red-600" />
+                      </div>
+                    )}
+                    {typeInfo.icon === "image" && (
+                      <div className="flex h-12 w-12 items-center justify-center rounded-md bg-blue-100">
+                        <ImageIcon className="h-6 w-6 text-blue-600" />
+                      </div>
+                    )}
+                  </div>
 
                   {/* Title */}
                   <h3 className="font-semibold text-lg mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                     {resource.title}
                   </h3>
 
-                  {/* Type for PDF */}
-                  {typeInfo.icon === "pdf" && (
-                    <p className="text-xs text-muted-foreground uppercase mb-4">
-                      {typeInfo.label}
-                    </p>
-                  )}
+                  {/* Type label */}
+                  <p className="text-xs text-muted-foreground uppercase mb-4">
+                    {typeInfo.label}
+                  </p>
 
                   {/* Footer */}
                   <div className="flex items-center justify-between mt-4 pt-4 border-t">
@@ -156,72 +137,27 @@ export function StudentResourcesGrid() {
       </div>
 
       {/* File Viewer Dialog - LinkedIn Style */}
-      <Dialog open={!!viewingResource} onOpenChange={(open) => !open && setViewingResource(null)}>
-        <DialogContent className="max-w-5xl max-h-[95vh] overflow-hidden flex flex-col p-0 gap-0">
-          <DialogHeader className="px-6 py-4 border-b">
-            <DialogTitle className="text-xl font-semibold">{viewingResource?.title}</DialogTitle>
-            {viewingResource && (
-              <p className="text-sm text-muted-foreground mt-1">
-                {resourceTypeMap[viewingResource.type]?.label}
-              </p>
-            )}
-          </DialogHeader>
-          <div className="flex-1 overflow-auto bg-gray-50 p-6">
-            {viewingResource && (
+      {viewingResource && viewingResource.type === "IMAGE" ? (
+        <ImageDialogViewer
+          imageUrl={viewingResource.attachment}
+          isOpen={!!viewingResource}
+          onClose={() => setViewingResource(null)}
+          alt={viewingResource.title}
+        />
+      ) : viewingResource && viewingResource.type === "VIDEO_CLASS" ? (
+        <Dialog open={!!viewingResource} onOpenChange={(open) => !open && setViewingResource(null)}>
+          <DialogContent className="max-w-5xl max-h-[95vh] overflow-hidden flex flex-col p-0 gap-0 bg-black border-none">
+            <div className="flex-1 overflow-auto bg-black p-6">
               <div className="flex justify-center items-center min-h-[60vh]">
-                {viewingResource.type === "PDF_DOCUMENT" && (
-                  <iframe
-                    src={viewingResource.attachment}
-                    className="w-full h-[75vh] border rounded-lg shadow-lg bg-white"
-                    title={viewingResource.title}
-                  />
-                )}
-                {viewingResource.type === "VIDEO_CLASS" && (
-                  <div className="w-full max-w-4xl">
-                    <video
-                      src={viewingResource.attachment}
-                      controls
-                      controlsList="nodownload"
-                      className="w-full h-auto max-h-[75vh] rounded-lg shadow-lg bg-black"
-                      preload="metadata"
-                      playsInline
-                      crossOrigin="anonymous"
-                    >
-                      Your browser does not support the video tag.
-                    </video>
-                  </div>
-                )}
-                {viewingResource.type === "IMAGE" && (
-                  <div className="flex justify-center w-full">
-                    <img
-                      src={viewingResource.attachment}
-                      alt={viewingResource.title}
-                      className="max-w-full max-h-[75vh] object-contain rounded-lg shadow-lg"
-                      loading="eager"
-                    />
-                  </div>
-                )}
+                <VideoDisplay
+                  videoUrl={viewingResource.attachment}
+                  className="w-full max-w-4xl"
+                />
               </div>
-            )}
-          </div>
-          {viewingResource && (
-            <div className="flex justify-end gap-3 px-6 py-4 border-t bg-white">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  if (viewingResource.attachment) {
-                    window.open(viewingResource.attachment, '_blank');
-                  }
-                }}
-                className="flex items-center gap-2"
-              >
-                <Download className="h-4 w-4" />
-                Download
-              </Button>
             </div>
-          )}
-        </DialogContent>
-      </Dialog>
+          </DialogContent>
+        </Dialog>
+      ) : null}
     </>
   );
 }
