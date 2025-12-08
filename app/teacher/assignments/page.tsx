@@ -73,17 +73,17 @@ export default function AssignmentsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6 p-4 sm:p-0">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Assignments</h1>
-          <p className="text-muted-foreground mt-1">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Assignments</h1>
+          <p className="text-sm sm:text-base text-muted-foreground mt-1">
             Create and grade coursework
           </p>
         </div>
         <Button
-          className="bg-blue-600 hover:bg-blue-700"
+          className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto"
           onClick={() => setDialogOpen(true)}
         >
           + Create Assignment
@@ -96,7 +96,7 @@ export default function AssignmentsPage() {
       />
 
       {/* Assignment Cards List */}
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {isLoading ? (
           <div className="space-y-6">
             {[1, 2, 3].map((i) => (

@@ -63,7 +63,7 @@ export function LandingPage() {
         {/* Right Section - Portal Selection */}
         <div className="w-full md:w-1/2 flex flex-col justify-center p-4 sm:p-5 md:p-6 lg:p-8 bg-white">
           <div className="w-full flex flex-col items-center">
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-4 sm:mb-5 md:mb-6 lg:mb-8 text-center">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-3xl font-bold text-black mb-4 sm:mb-5 md:mb-6 lg:mb-8 text-center">
               Select Your Portal
             </h2>
 

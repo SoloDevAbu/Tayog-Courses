@@ -193,11 +193,11 @@ export default function TeacherPeoplePage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8 p-4 sm:p-0">
       {/* Page Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
             People & Performance
           </h1>
         </div>
@@ -213,12 +213,12 @@ export default function TeacherPeoplePage() {
           </div>
         ) : (
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-muted-foreground">TEAM</span>
+          <span className="text-xs sm:text-sm font-medium text-muted-foreground">TEAM</span>
           <div className="flex -space-x-2">
               {data?.teamMembers?.slice(0, 3).map((member) => (
                 <Avatar
                   key={member.id}
-                  className="h-8 w-8 border-2 border-white"
+                  className="h-7 w-7 sm:h-8 sm:w-8 border-2 border-white"
                   title={member.name}
                 >
                 <AvatarFallback className="bg-purple-600 text-white text-xs">
@@ -227,7 +227,7 @@ export default function TeacherPeoplePage() {
               </Avatar>
             ))}
               {data?.teamMembers && data.teamMembers.length > 3 && (
-                <Avatar className="h-8 w-8 border-2 border-white bg-gray-200">
+                <Avatar className="h-7 w-7 sm:h-8 sm:w-8 border-2 border-white bg-gray-200">
                   <AvatarFallback className="bg-gray-200 text-gray-600 text-xs">
                     +{data.teamMembers.length - 3}
                   </AvatarFallback>
@@ -239,7 +239,7 @@ export default function TeacherPeoplePage() {
       </div>
 
       {/* Invitation Cards */}
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2">
         {/* Invite Students Card */}
         <Card>
           <CardHeader>
@@ -284,15 +284,15 @@ export default function TeacherPeoplePage() {
 
       {/* Student Directory Section */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold">Student Directory</h2>
-            <p className="text-muted-foreground mt-1">
+            <h2 className="text-xl sm:text-2xl font-bold">Student Directory</h2>
+            <p className="text-sm sm:text-base text-muted-foreground mt-1">
               Manage enrollment and class roster
             </p>
           </div>
           <Button
-            className="bg-blue-600 hover:bg-blue-700"
+            className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto"
             onClick={() => setEnrollStudentDialogOpen(true)}
           >
             <UserPlus className="mr-2 h-4 w-4" />
@@ -307,15 +307,16 @@ export default function TeacherPeoplePage() {
 
         <Card>
           <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[100px]">ID</TableHead>
-                  <TableHead>Student</TableHead>
-                  <TableHead>Contact</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="min-w-[80px]">ID</TableHead>
+                    <TableHead className="min-w-[150px]">Student</TableHead>
+                    <TableHead className="min-w-[200px]">Contact</TableHead>
+                    <TableHead className="min-w-[100px] text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
               <TableBody>
                 {isLoadingStudents ? (
                   <>
@@ -404,7 +405,8 @@ export default function TeacherPeoplePage() {
                   ))
                 )}
               </TableBody>
-            </Table>
+              </Table>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -412,20 +414,21 @@ export default function TeacherPeoplePage() {
       {/* Class Performance Section */}
       <div className="space-y-4">
         <div>
-          <h2 className="text-2xl font-bold">Class Performance</h2>
+          <h2 className="text-xl sm:text-2xl font-bold">Class Performance</h2>
         </div>
 
         <Card>
           <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Student</TableHead>
-                  <TableHead>Avg. Grade</TableHead>
-                  <TableHead>Assignments Completed</TableHead>
-                  <TableHead>Status</TableHead>
-                </TableRow>
-              </TableHeader>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="min-w-[150px]">Student</TableHead>
+                    <TableHead className="min-w-[100px]">Avg. Grade</TableHead>
+                    <TableHead className="min-w-[150px]">Assignments Completed</TableHead>
+                    <TableHead className="min-w-[120px]">Status</TableHead>
+                  </TableRow>
+                </TableHeader>
               <TableBody>
                 {isLoading ? (
                   <>
@@ -496,20 +499,21 @@ export default function TeacherPeoplePage() {
                   </TableRow>
                 )}
               </TableBody>
-            </Table>
+              </Table>
+            </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Team Members Section */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold">Team Members</h2>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <h2 className="text-xl sm:text-2xl font-bold">Team Members</h2>
           <div className="flex gap-2">
             <Button
               variant="outline"
               onClick={() => setInviteCoTeacherDialogOpen(true)}
-              className="bg-purple-50 hover:bg-purple-100 border-purple-200"
+              className="bg-purple-50 hover:bg-purple-100 border-purple-200 w-full sm:w-auto"
             >
               <UserPlus className="h-4 w-4 mr-2" />
               Invite Co-Teacher
@@ -522,14 +526,15 @@ export default function TeacherPeoplePage() {
         />
         <Card>
           <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Team Member</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Role</TableHead>
-                </TableRow>
-              </TableHeader>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="min-w-[150px]">Team Member</TableHead>
+                    <TableHead className="min-w-[200px]">Email</TableHead>
+                    <TableHead className="min-w-[100px]">Role</TableHead>
+                  </TableRow>
+                </TableHeader>
               <TableBody>
         {isLoading ? (
                   <>
@@ -596,7 +601,8 @@ export default function TeacherPeoplePage() {
                   </TableRow>
                 )}
               </TableBody>
-            </Table>
+              </Table>
+            </div>
                 </CardContent>
               </Card>
       </div>

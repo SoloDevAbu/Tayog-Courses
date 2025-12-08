@@ -126,13 +126,13 @@ export default function AssignmentDetailPage() {
         onOpenChange={setEditDialogOpen}
         assignment={assignment}
       />
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6 p-4 sm:p-0">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
           <Button
             variant="ghost"
             onClick={() => router.back()}
-            className="mb-4"
+            className="w-full sm:w-auto mb-0 sm:mb-4"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
@@ -140,6 +140,7 @@ export default function AssignmentDetailPage() {
           <Button
             variant="outline"
             onClick={() => setEditDialogOpen(true)}
+            className="w-full sm:w-auto"
           >
             <Edit className="h-4 w-4 mr-2" />
             Edit Assignment
@@ -148,16 +149,16 @@ export default function AssignmentDetailPage() {
 
         {/* Assignment Details */}
         <Card>
-          <CardContent className="p-6 space-y-6">
+          <CardContent className="p-4 sm:p-6 space-y-4 sm:space-y-6">
             {/* Assignment Title and Info */}
-            <div className="space-y-4">
-              <div className="flex items-start justify-between">
-                <h1 className="text-3xl font-bold tracking-tight">
+            <div className="space-y-3 sm:space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-0">
+                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
                   {assignment.title}
                 </h1>
                 <div className="flex items-center gap-2">
                   <div className="flex flex-col items-end">
-                    <span className="text-2xl font-bold leading-none">
+                    <span className="text-xl sm:text-2xl font-bold leading-none">
                       {assignment.submissions || 0}
                     </span>
                     <span className="text-xs uppercase tracking-wider text-muted-foreground mt-1">
@@ -167,8 +168,8 @@ export default function AssignmentDetailPage() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 flex-wrap">
-                <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                <div className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground">
                   <Clock className="h-4 w-4" />
                   <span>Due: {formattedDueDate}</span>
                 </div>
@@ -183,6 +184,7 @@ export default function AssignmentDetailPage() {
                         setFileViewerOpen(true);
                       }
                     }}
+                    className="w-full sm:w-auto"
                   >
                     <FileText className="h-4 w-4 mr-2" />
                     View Attachment
@@ -202,13 +204,15 @@ export default function AssignmentDetailPage() {
             )}
 
             {/* Student Submissions Section */}
-            <div className="space-y-4 pt-6 border-t">
+            <div className="space-y-3 sm:space-y-4 pt-4 sm:pt-6 border-t">
               <div className="flex items-center justify-between">
               <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   Student Submissions ({submissions.length})
               </Label>
                 </div>
-              <SubmissionsTable submissions={submissions} />
+              <div className="overflow-x-auto">
+                <SubmissionsTable submissions={submissions} />
+              </div>
             </div>
           </CardContent>
         </Card>

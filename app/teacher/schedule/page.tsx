@@ -100,17 +100,17 @@ export default function SchedulePage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6 p-4 sm:p-0">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Schedule</h1>
-          <p className="text-muted-foreground mt-1">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Schedule</h1>
+          <p className="text-sm sm:text-base text-muted-foreground mt-1">
             Upcoming lectures and events
           </p>
         </div>
         <Button
-          className="bg-blue-600 hover:bg-blue-700"
+          className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto"
           onClick={() => setDialogOpen(true)}
         >
           <Plus className="mr-2 h-4 w-4" />
@@ -124,14 +124,14 @@ export default function SchedulePage() {
       />
 
       {/* Table */}
-      <div className="rounded-md border">
+      <div className="rounded-md border overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[200px]">Class</TableHead>
-              <TableHead>Topic</TableHead>
-              <TableHead className="w-[180px]">Date & Time</TableHead>
-              <TableHead className="w-[180px] text-right">Action</TableHead>
+              <TableHead className="min-w-[150px]">Class</TableHead>
+              <TableHead className="min-w-[200px]">Topic</TableHead>
+              <TableHead className="min-w-[150px]">Date & Time</TableHead>
+              <TableHead className="min-w-[120px] text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -185,10 +185,10 @@ export default function SchedulePage() {
                   </TableCell>
                   <TableCell className="py-4">
                     <div className="flex flex-col gap-1">
-                      <Badge variant="outline" className="bg-gray-100 text-gray-700 w-fit">
+                      <Badge variant="outline" className="bg-gray-100 text-gray-700 w-fit text-xs">
                         {format(new Date(item.time), "MMM dd, yyyy")}
                       </Badge>
-                      <Badge variant="outline" className="bg-blue-50 text-blue-700 w-fit border-blue-200">
+                      <Badge variant="outline" className="bg-blue-50 text-blue-700 w-fit border-blue-200 text-xs">
                         {format(new Date(item.time), "hh:mm a")}
                       </Badge>
                     </div>
@@ -196,11 +196,12 @@ export default function SchedulePage() {
                   <TableCell className="py-4 text-right">
                     <Button
                       size="sm"
-                      className="bg-green-600 hover:bg-green-700 text-white"
+                      className="bg-green-600 hover:bg-green-700 text-white text-xs sm:text-sm"
                       onClick={() => window.open(item.meetingLink, '_blank')}
                     >
-                      <Video className="mr-2 h-4 w-4" />
-                      Join Class
+                      <Video className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+                      <span className="hidden sm:inline">Join Class</span>
+                      <span className="sm:hidden">Join</span>
                     </Button>
                   </TableCell>
                 </TableRow>

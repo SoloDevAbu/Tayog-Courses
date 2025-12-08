@@ -195,19 +195,19 @@ export default function TeacherDashboardPage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8 p-4 sm:p-0">
         {/* Welcome Header */}
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
             Welcome back!
           </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-sm sm:text-base text-muted-foreground mt-1">
             {selectedCourse.name} Dashboard
           </p>
         </div>
 
         {/* Summary Cards */}
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           <Card className="border-l-4 border-l-purple-500">
             <CardHeader className="pb-3">
               <div className="flex items-center gap-3">
@@ -264,7 +264,7 @@ export default function TeacherDashboardPage() {
         </div>
 
         {/* Bottom Sections */}
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2">
           {/* Upcoming Deadlines */}
           <Card>
             <CardHeader>
@@ -278,11 +278,11 @@ export default function TeacherDashboardPage() {
                 upcomingDeadlines.map((assignment) => (
                   <div
                     key={assignment.id}
-                    className="relative pl-4 border-l-2 border-red-500"
+                    className="relative pl-3 sm:pl-4 border-l-2 border-red-500"
                   >
                     <div className="space-y-1">
-                      <p className="font-semibold">{assignment.title}</p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm sm:text-base font-semibold">{assignment.title}</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground">
                         Due: {new Date(assignment.dueDate).toLocaleDateString()}
                       </p>
                     </div>
@@ -308,17 +308,17 @@ export default function TeacherDashboardPage() {
                   <div className="absolute top-4 right-4">
                     <Video className="h-5 w-5 text-white/80" />
                   </div>
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     <div>
-                      <p className="text-sm text-blue-100">
+                      <p className="text-xs sm:text-sm text-blue-100">
                         {new Date(nextClass.time).toLocaleString()}
                       </p>
                     </div>
                     <div className="space-y-1">
-                      <h3 className="text-2xl font-bold">{nextClass.subject}</h3>
-                      <p className="text-blue-100">{nextClass.topic}</p>
+                      <h3 className="text-xl sm:text-2xl font-bold">{nextClass.subject}</h3>
+                      <p className="text-sm sm:text-base text-blue-100">{nextClass.topic}</p>
                     </div>
-                    <Button className="w-full bg-white text-blue-600 hover:bg-blue-50">
+                    <Button className="w-full bg-white text-blue-600 hover:bg-blue-50 text-sm sm:text-base">
                       Join Classroom
                     </Button>
                   </div>
@@ -333,20 +333,21 @@ export default function TeacherDashboardPage() {
         {/* Class Performance Section */}
         <div className="space-y-4">
           <div>
-            <h2 className="text-2xl font-bold">Class Performance</h2>
+            <h2 className="text-xl sm:text-2xl font-bold">Class Performance</h2>
           </div>
 
           <Card>
             <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Student</TableHead>
-                    <TableHead>Avg. Grade</TableHead>
-                    <TableHead>Assignments Completed</TableHead>
-                    <TableHead>Status</TableHead>
-                  </TableRow>
-                </TableHeader>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="min-w-[150px]">Student</TableHead>
+                      <TableHead className="min-w-[100px]">Avg. Grade</TableHead>
+                      <TableHead className="min-w-[150px]">Assignments Completed</TableHead>
+                      <TableHead className="min-w-[120px]">Status</TableHead>
+                    </TableRow>
+                  </TableHeader>
                 <TableBody>
                   {isLoadingPeople ? (
                     <>
@@ -418,6 +419,7 @@ export default function TeacherDashboardPage() {
                   )}
                 </TableBody>
               </Table>
+              </div>
             </CardContent>
           </Card>
         </div>

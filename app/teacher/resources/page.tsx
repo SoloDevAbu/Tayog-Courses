@@ -233,23 +233,23 @@ export default function ResourcesPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6 p-4 sm:p-0">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
           Resource Hub
         </h1>
-        <p className="text-muted-foreground mt-1">
+        <p className="text-sm sm:text-base text-muted-foreground mt-1">
           Learning materials and recordings
         </p>
       </div>
 
       {/* Upload Section */}
       <Card className="bg-gray-50 border-gray-200">
-        <CardContent className="p-6">
-          <div className="flex items-end gap-4 flex-wrap">
-            <div className="flex-1 min-w-[200px]">
-              <Label className="text-sm font-semibold uppercase tracking-wide mb-2 block">
+        <CardContent className="p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-end gap-4">
+            <div className="flex-1 w-full sm:min-w-[200px]">
+              <Label className="text-xs sm:text-sm font-semibold uppercase tracking-wide mb-2 block">
                 Title / Topic
               </Label>
               <Input
@@ -259,8 +259,8 @@ export default function ResourcesPage() {
                 className="bg-white"
               />
             </div>
-            <div className="min-w-[150px]">
-              <Label className="text-sm font-semibold uppercase tracking-wide mb-2 block">
+            <div className="w-full sm:min-w-[150px]">
+              <Label className="text-xs sm:text-sm font-semibold uppercase tracking-wide mb-2 block">
                 Type
               </Label>
               <Select value={type} onValueChange={setType}>
@@ -279,6 +279,7 @@ export default function ResourcesPage() {
               variant="outline"
               onClick={handleChooseFileClick}
               disabled={isUploading}
+              className="w-full sm:w-auto"
             >
               <FolderOpen className="mr-2 h-4 w-4" />
               Choose File
@@ -295,8 +296,8 @@ export default function ResourcesPage() {
 
           {/* File Preview */}
           {selectedFile && (
-            <div className="mt-4 p-4 bg-white rounded-md border">
-              <div className="flex items-start gap-4 mb-4">
+            <div className="mt-4 p-3 sm:p-4 bg-white rounded-md border">
+              <div className="flex items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
                 {/* Preview */}
                 {filePreview && type === "Image" && (
                   <div className="shrink-0 relative h-20 w-20">
@@ -362,18 +363,19 @@ export default function ResourcesPage() {
 
               {/* Submit Button */}
               {!uploadSuccess && (
-                <div className="flex justify-end gap-2 pt-3 border-t">
+                <div className="flex flex-col sm:flex-row justify-end gap-2 pt-3 border-t">
                   <Button
                     variant="outline"
                     onClick={handleRemoveFile}
                     disabled={isUploading}
+                    className="w-full sm:w-auto"
                   >
                     Cancel
                   </Button>
                   <Button
                     onClick={handleSubmit}
                     disabled={isUploading || !title.trim()}
-                    className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
+                    className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 w-full sm:w-auto"
                   >
                     {isUploading ? (
                       <>
@@ -395,7 +397,7 @@ export default function ResourcesPage() {
       </Card>
 
       {/* Resources Grid */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {isLoadingResources ? (
           <>
             {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -427,8 +429,8 @@ export default function ResourcesPage() {
                 className="relative overflow-hidden transition-all duration-200 cursor-pointer hover:shadow-md"
                 onClick={() => handleViewResource(resource)}
               >
-                <CardContent className="p-4 relative">
-                  <div className="flex items-center gap-4">
+                <CardContent className="p-3 sm:p-4 relative">
+                  <div className="flex items-center gap-3 sm:gap-4">
                     {/* Icon on left */}
                     <div className="shrink-0">
                       {typeInfo.icon === "pdf" && (

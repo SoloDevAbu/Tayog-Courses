@@ -80,7 +80,7 @@ export function Navbar({
 
   return (
     <section className="bg-white z-50 w-full shadow-sm border-b sticky top-0 py-2 h-[60px] flex items-center justify-between">
-      <nav className="flex justify-between w-full bg-white max-w-7xl sm:px-3 md:px-6 mx-auto items-center">
+      <nav className="flex justify-between w-full bg-white max-w-7xl px-4 sm:px-3 md:px-6 mx-auto items-center">
         <div className="flex items-center gap-2 lg:gap-3">
           <Link href="/">
             <Image
@@ -93,7 +93,7 @@ export function Navbar({
           </Link>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           {userName && (
             <>
               <div className="hidden sm:flex flex-col items-end max-w-[150px]">
