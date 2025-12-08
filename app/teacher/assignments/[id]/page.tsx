@@ -128,11 +128,11 @@ export default function AssignmentDetailPage() {
       />
       <div className="space-y-4 sm:space-y-6 p-4 sm:p-0">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+        <div className="flex flex-row items-center justify-between gap-3">
           <Button
             variant="ghost"
             onClick={() => router.back()}
-            className="w-full sm:w-auto mb-0 sm:mb-4"
+            className="w-auto"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
@@ -140,7 +140,7 @@ export default function AssignmentDetailPage() {
           <Button
             variant="outline"
             onClick={() => setEditDialogOpen(true)}
-            className="w-full sm:w-auto"
+            className="w-auto"
           >
             <Edit className="h-4 w-4 mr-2" />
             Edit Assignment

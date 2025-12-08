@@ -18,8 +18,8 @@ import { format } from "date-fns";
 export function StudentScheduleTable() {
   const { data: scheduleData = [], isLoading } = useSchedules();
   return (
-    <div className="rounded-md border">
-      <Table>
+    <div className="rounded-md border overflow-x-auto">
+      <Table className="min-w-[720px]">
         <TableHeader>
           <TableRow>
             <TableHead className="w-[200px]">Class</TableHead>

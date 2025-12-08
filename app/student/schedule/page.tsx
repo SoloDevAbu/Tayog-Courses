@@ -42,8 +42,8 @@ export default function StudentSchedulePage() {
           <Skeleton className="h-9 w-64" />
           <Skeleton className="h-5 w-96 mt-2" />
         </div>
-        <div className="rounded-md border">
-          <Table>
+        <div className="rounded-md border overflow-x-auto">
+          <Table className="min-w-[720px]">
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[200px]">Class</TableHead>
